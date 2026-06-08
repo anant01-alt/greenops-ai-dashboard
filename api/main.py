@@ -72,7 +72,7 @@ def forecast():
         .reset_index()
     )
 
-    # Create same features used during training
+    # Same features used during training
     daily["lag_7"] = daily["co2e_kg"].shift(7)
     daily["lag_14"] = daily["co2e_kg"].shift(14)
     daily["rolling_7"] = daily["co2e_kg"].rolling(7).mean()
@@ -80,11 +80,9 @@ def forecast():
 
     daily = daily.dropna()
 
-    latest = daily.iloc[-30:]
+    latest = daily.tail(30)
 
-    X = latest[
-        ["lag_7", "lag_14", "rolling_7", "dow"]
-    ]
+    X = latest[["lag_7", "lag_14", "rolling_7", "dow"]]
 
     preds = model.predict(X)
 
